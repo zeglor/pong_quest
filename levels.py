@@ -203,7 +203,7 @@ level_maps[5] = [
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'E'],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'E',0],
 		[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -458,6 +458,7 @@ class Level:
 		t_npc.add((self.Gdrawables, self.Gdynamic, self.Grigid, self.GmainNpc))
 		
 		#init enemies
+		npc = None
 		for (enemy_type, enemy_pos) in enemies[indx]:
 			npc = NPC.create(enemy_type, enemy_pos)
 			npc.add((self.Gdrawables, self.Gdynamic, self.Grigid, self.Genemies))
@@ -472,6 +473,8 @@ class Level:
 		self.Gdynamic.empty()
 		self.Grigid.empty()
 		self.Gground.empty()
+		self.Genemies.empty()
+		self.GmainNpc.empty()
 	
 	def init_map(self):
 		for tile_y, tile_xl in enumerate(self.level_map):
