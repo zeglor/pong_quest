@@ -359,72 +359,14 @@ level_maps[NUM_LEVELS-1] = [
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,'O','O',1,1,1,1,1,1]
 	]
 
-platform_name = [None for i in range(NUM_LEVELS)]
-platform_name[0] = 'gravity_single_top'
-platform_name[1] = 'gravity_single_bot'
-platform_name[2] = 'gravity_single_top'
-platform_name[3] = 'gravity_single_top'
-platform_name[4] = 'gravity'
-platform_name[5] = 'gravity'
-platform_name[6] = 'gravity'
-platform_name[7] = 'gravity'
-platform_name[8] = 'gravity'
-platform_name[NUM_LEVELS-1] = 'gravity'
+platform_name = ['gravity_single_top' for x in range(4)] + ['gravity' for x in range(6)]
 
-npc_name = [None for i in range(NUM_LEVELS)]
-npc_name[0] = 'main'
-npc_name[1] = 'main'
-npc_name[2] = 'main'
-npc_name[3] = 'main'
-npc_name[4] = 'main'
-npc_name[5] = 'main'
-npc_name[6] = 'main'
-npc_name[7] = 'main'
-npc_name[8] = 'main'
-npc_name[NUM_LEVELS-1] = 'main'
+npc_name = ['main' for x in range(10)]
 
-npc_start_pos = [None for i in range(NUM_LEVELS)]
-npc_start_pos[0] = (40, 360)
-npc_start_pos[1] = (40, 360)
-npc_start_pos[2] = (40, 100)
-npc_start_pos[3] = (40, 360)
-npc_start_pos[4] = (40, 380)
-npc_start_pos[5] = (40, 380)
-npc_start_pos[6] = (40, 320)
-npc_start_pos[7] = (40, 380)
-npc_start_pos[8] = (40, 380)
-npc_start_pos[NUM_LEVELS-1] = (40, 360)
+npc_start_pos = [(40, 360) for i in range(10)]
 
-enemies = [None for i in range(NUM_LEVELS)]
-enemies[0] = [
-]
-enemies[1] = [
-]
-enemies[2] = [
-]
-enemies[3] = [
-]
-enemies[4] = [
-]
-enemies[5] = [
-	('saw', (200, 320))
-]
-enemies[6] = [
-	('saw', (200, 460)),
-	('saw', (600, 220)),
-]
-enemies[7] = [
-	('saw', (200, 320)),
-	('saw', (400, 440)),
-]
-enemies[8] = [
-	('saw', (200, 320)),
-	('saw', (400, 440)),
-]
-enemies[NUM_LEVELS-1] = [
-	('saw', (200, 350)),
-	('saw', (400, 350)),
-]
+enemies = [[] for i in range(5)] + [[('saw', (200, 320))]] + [('saw', (200, 460)), ('saw', (600, 220))] +\
+[[('saw', (200, 320)), ('saw', (400, 440))] for x in range(2)] + [[('saw', (200, 350)), ('saw', (400, 350))]]
 
 class Level:
 	def __init__(self):
