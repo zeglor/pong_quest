@@ -1,15 +1,18 @@
 import pygame as pg
 from levels import Level
+from resources import ResourcesContainer
 from params import *
 
 def main():
 	pg.init()
+	resources = ResourcesContainer()
+	resources.load_all()
 	
 	clock = pg.time.Clock()
 	screen = pg.display.set_mode(DISPLAY_SIZE)
 	screen_rect = pg.display.get_surface().get_rect()
 	
-	level = Level()
+	level = Level(resources)
 	level.start()
 	
 	#==========main game loop========
@@ -54,7 +57,10 @@ def main():
 		
 		#draw stuff
 		bg = pg.Surface(DISPLAY_SIZE)
-		bg.fill(pg.Color(BG_COLOR))
+		if resources.bg is not None:
+			bg.blit(resources.bg, (0, 0))
+		else:
+			bg.fill(pg.Color(BG_COLOR))
 		screen.blit(bg, dest = (0,0))
 		level.Gdrawables.draw(screen)
 		pg.display.update()

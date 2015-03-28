@@ -3,14 +3,14 @@ from params import *
 
 class Tile(pg.sprite.Sprite):
 	@classmethod
-	def create(cl, ttype, pos):
+	def create(cl, ttype, pos, pic = None):
 		if cl.__name__ != 'Tile':
 			return None
 		
 		if ttype == 0:
 			return None
 		elif ttype == 1:
-			return BasicTile(pos)
+			return BasicTile(pos, pic)
 		elif ttype == 'O':
 			return OpaqueTile(pos)
 		elif ttype == 'J':
@@ -18,9 +18,11 @@ class Tile(pg.sprite.Sprite):
 		elif ttype == 'E':
 			return FinishTile(pos)
 	
-	def __init__(self, pos=(0, 0)):
+	def __init__(self, pos=(0, 0), pic = None):
 		pg.sprite.Sprite.__init__(self)
 		self.pos = pos
+		
+		self.tile_image = pic
 		
 		self.image = self.get_image()
 		
@@ -30,7 +32,10 @@ class Tile(pg.sprite.Sprite):
 	def get_image(self):
 		#hook
 		img = pg.Surface(TILE_SIZE)
-		img.fill(pg.Color('#333333'))
+		if len(self.images) > 0:
+			img.blit(self.images[0], (0,0))
+		else:
+			img.fill(pg.Color('#333333'))
 		return None
 	
 	def update(self):
@@ -41,17 +46,20 @@ class Tile(pg.sprite.Sprite):
 		pass
 
 class BasicTile(Tile):
-	def __init__(self, pos=(0, 0)):
-		super().__init__(pos)
+	def __init__(self, pos=(0, 0), pic = None):
+		super().__init__(pos, pic)
 	
 	def get_image(self):
 		img = pg.Surface(TILE_SIZE)
-		img.fill(pg.Color(BG_COLOR))
-		pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
+		if self.tile_image is not None:
+			img.blit(self.tile_image, (0,0))
+		else:
+			img.fill(pg.Color(BG_COLOR))
+			pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
 		return img
 
 class OpaqueTile(Tile):
-	def __init__(self, pos=(0, 0)):
+	def __init__(self, pos=(0, 0), pic = None):
 		super().__init__(pos)
 	
 	def get_image(self):
@@ -65,7 +73,7 @@ class OpaqueTile(Tile):
 		self.rect = self.image.get_rect()
 
 class JumpTile(Tile):
-	def __init__(self, pos=(0, 0)):
+	def __init__(self, pos=(0, 0), pic = None):
 		super().__init__(pos)
 		self.active = False
 		self.speed_abs = 6
@@ -102,7 +110,7 @@ class JumpTile(Tile):
 					self.active = False
 
 class FinishTile(Tile):
-	def __init__(self, pos=(0, 0)):
+	def __init__(self, pos=(0, 0), pic = None):
 		super().__init__(pos)
 	
 	def get_image(self):

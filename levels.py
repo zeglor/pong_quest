@@ -1,4 +1,3 @@
-import pdb
 import pygame as pg
 from tiles import Tile
 from npcs import NPC
@@ -427,8 +426,9 @@ enemies[NUM_LEVELS-1] = [
 ]
 
 class Level:
-	def __init__(self):
+	def __init__(self, resources = None):
 		self.level_indx = 0
+		self.resources = resources
 		#groups
 		self.Gdrawables = pg.sprite.Group()
 		self.Gdynamic = pg.sprite.Group()
@@ -479,7 +479,7 @@ class Level:
 	def init_map(self):
 		for tile_y, tile_xl in enumerate(self.level_map):
 			for tile_x, tile_type in enumerate(tile_xl):
-				tile = Tile.create(tile_type, (tile_x, tile_y))
+				tile = Tile.create(tile_type, (tile_x, tile_y), self.resources.ground_tile)
 				if tile is not None:
 					tile.add(self.Gdrawables, self.Gground)
 					if isinstance(tile, JumpTile):

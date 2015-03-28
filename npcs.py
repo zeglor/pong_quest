@@ -2,7 +2,6 @@ import pygame as pg
 from params import *
 from copy import copy, deepcopy
 from tiles import FinishTile, JumpTile
-import pdb
 
 class NPC(pg.sprite.Sprite):
 	@classmethod
