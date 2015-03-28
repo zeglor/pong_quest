@@ -1,7 +1,7 @@
 from cx_Freeze import setup, Executable
 
 includefiles = ['levels.py', 'npcs.py', 'params.py',
-	'platforms.py', 'tiles.py']
+	'platforms.py', 'tiles.py', 'resources']
 includes = []
 excludes = []
 packages = []
