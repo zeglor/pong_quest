@@ -3,26 +3,26 @@ from params import *
 
 class Tile(pg.sprite.Sprite):
 	@classmethod
-	def create(cl, ttype, pos, pic = None):
+	def create(cl, ttype, pos, resources_manager=None):
 		if cl.__name__ != 'Tile':
 			return None
 		
 		if ttype == 0:
 			return None
 		elif ttype == 1:
-			return BasicTile(pos, pic)
+			return BasicTile(pos, resources_manager)
 		elif ttype == 'O':
-			return OpaqueTile(pos)
+			return OpaqueTile(pos, resources_manager)
 		elif ttype == 'J':
-			return JumpTile(pos)
+			return JumpTile(pos, resources_manager)
 		elif ttype == 'E':
-			return FinishTile(pos)
+			return FinishTile(pos, resources_manager)
 	
-	def __init__(self, pos=(0, 0), pic = None):
+	def __init__(self, pos=(0, 0), resources_manager=None):
 		pg.sprite.Sprite.__init__(self)
 		self.pos = pos
 		
-		self.tile_image = pic
+		self.resources_manager = resources_manager
 		
 		self.image = self.get_image()
 		
@@ -32,11 +32,8 @@ class Tile(pg.sprite.Sprite):
 	def get_image(self):
 		#hook
 		img = pg.Surface(TILE_SIZE)
-		if len(self.images) > 0:
-			img.blit(self.images[0], (0,0))
-		else:
-			img.fill(pg.Color('#333333'))
-		return None
+		img.fill(pg.Color('#333333'))
+		return img
 	
 	def update(self):
 		pass
@@ -46,26 +43,29 @@ class Tile(pg.sprite.Sprite):
 		pass
 
 class BasicTile(Tile):
-	def __init__(self, pos=(0, 0), pic = None):
-		super().__init__(pos, pic)
+	def create(cl, ttype, pos, resources_manager=None):
+		super().__init__(pos, resources_manager)
 	
 	def get_image(self):
 		img = pg.Surface(TILE_SIZE)
-		if self.tile_image is not None:
-			img.blit(self.tile_image, (0,0))
-		else:
+		try:
+			img.blit(self.resources_manager.ground_tile, (0,0))
+		except AttributeError:
 			img.fill(pg.Color(BG_COLOR))
 			pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
 		return img
 
 class OpaqueTile(Tile):
-	def __init__(self, pos=(0, 0), pic = None):
-		super().__init__(pos)
+	def __init__(self, pos=(0, 0), resources_manager=None):
+		super().__init__(pos, resources_manager)
 	
 	def get_image(self):
 		img = pg.Surface(TILE_SIZE)
-		img.fill(pg.Color(BG_COLOR))
-		pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
+		try:
+			img.blit(self.resources_manager.ground_tile, (0,0))
+		except AttributeError:
+			img.fill(pg.Color(BG_COLOR))
+			pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
 		return img
 	
 	def activate(self, npc):
@@ -73,10 +73,10 @@ class OpaqueTile(Tile):
 		self.rect = self.image.get_rect()
 
 class JumpTile(Tile):
-	def __init__(self, pos=(0, 0), pic = None):
-		super().__init__(pos)
+	def __init__(self, pos=(0, 0), resources_manager=None):
+		super().__init__(pos, resources_manager)
 		self.active = False
-		self.speed_abs = 6
+		self.speed_abs = 7
 		self.wait_updates = 1
 		self.updates_active = 26
 		self.cur_update = 0
@@ -86,8 +86,11 @@ class JumpTile(Tile):
 	
 	def get_image(self):
 		img = pg.Surface(TILE_SIZE)
-		img.fill(pg.Color(BG_COLOR))
-		pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
+		try:
+			img.blit(self.resources_manager.ground_tile, (0,0))
+		except AttributeError:
+			img.fill(pg.Color(BG_COLOR))
+			pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
 		return img
 	
 	def activate(self, npc):
@@ -110,12 +113,16 @@ class JumpTile(Tile):
 					self.active = False
 
 class FinishTile(Tile):
-	def __init__(self, pos=(0, 0), pic = None):
-		super().__init__(pos)
+	def __init__(self, pos=(0, 0), resources_manager=None):
+		super().__init__(pos, resources_manager)
 	
 	def get_image(self):
-		img = pg.Surface(TILE_SIZE)
-		img.fill(pg.Color('#551299'))
+		img = pg.Surface(TILE_SIZE, flags=pg.SRCALPHA)
+		try:
+			img.blit(self.resources_manager.door, (0,0))
+		except AttributeError:
+			img.fill(pg.Color(BG_COLOR))
+			pg.draw.rect(img, pg.Color('#333333'), img.get_rect(), 2)
 		return img
 	
 	def activate(self, npc):

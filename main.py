@@ -5,12 +5,12 @@ from params import *
 
 def main():
 	pg.init()
+	screen = pg.display.set_mode(DISPLAY_SIZE)
+	screen_rect = pg.display.get_surface().get_rect()
 	resources = ResourcesContainer()
 	resources.load_all()
 	
 	clock = pg.time.Clock()
-	screen = pg.display.set_mode(DISPLAY_SIZE)
-	screen_rect = pg.display.get_surface().get_rect()
 	
 	level = Level(resources)
 	level.start()
@@ -61,6 +61,12 @@ def main():
 			bg.blit(resources.bg, (0, 0))
 		else:
 			bg.fill(pg.Color(BG_COLOR))
+		
+		font = pg.font.SysFont('verdana', size = 14)
+		fps_text = font.render('FPS: {}'.format(int(clock.get_fps())), True, pg.Color('#111111'))
+		bg.blit(fps_text, (10, 10))
+		
+		
 		screen.blit(bg, dest = (0,0))
 		level.Gdrawables.draw(screen)
 		pg.display.update()

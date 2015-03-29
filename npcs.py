@@ -5,19 +5,20 @@ from tiles import FinishTile, JumpTile
 
 class NPC(pg.sprite.Sprite):
 	@classmethod
-	def create(cl, npc_type, pos, level=None):
+	def create(cl, npc_type, pos, level=None, resources = None):
 		if cl.__name__ != 'NPC':
 			return None
 		
 		if npc_type == 'main':
-			return NPCMain(pos, level)
+			return NPCMain(pos, level, resources)
 		
 		if npc_type == 'saw':
-			return NPCSaw(pos)
+			return NPCSaw(pos, resources)
 	
-	def __init__(self, pos):
+	def __init__(self, pos, resources = None):
 		self.initial_pos = copy(pos)
 		pg.sprite.Sprite.__init__(self)
+		self.resources = resources
 		self.image = self.get_image()
 		self.rect = self.image.get_rect()
 		self.rect.topleft = pos
@@ -110,8 +111,9 @@ class NPC(pg.sprite.Sprite):
 		self.out_of_gamefield()
 		
 class NPCMain(NPC):
-	def __init__(self, pos, level=None):
-		super().__init__(pos)
+	def __init__(self, pos, level=None, resources=None):
+		self.image_sheet = copy(resources.old_man)
+		super().__init__(pos, resources)
 		self.level = level
 	
 	def update(self):
@@ -122,11 +124,18 @@ class NPCMain(NPC):
 				#we finished the level!
 				self.level.finish_level()
 		
+		#update sprite sheet
+		self.image_sheet.update()
+		self.image = self.image_sheet.get_image()
+		
 		#perform usual stuff
 		super().update()
+	
+	def get_image(self):
+		return self.image_sheet.get_image()
 
 class NPCEnemy(NPC):
-	def __init__(self, pos, size):
+	def __init__(self, pos, size, resources=None):
 		self.size = size
 		super().__init__(pos)
 	
@@ -137,8 +146,8 @@ class NPCEnemy(NPC):
 
 #enemies
 class NPCSaw(NPCEnemy):
-	def __init__(self, pos):
-		super().__init__(pos, SAW_SIZE)
+	def __init__(self, pos, resources = None):
+		super().__init__(pos, SAW_SIZE, resources)
 	
 	def update(self):
 		#we dont move
