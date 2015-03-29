@@ -393,7 +393,7 @@ enemies = [[] for _ in range(5)] + \
 
 class Level:
 	def __init__(self, resources = None):
-		self.level_indx = 6
+		self.level_indx = 0
 		self.resources = resources
 		#groups
 		self.Gdrawables = pg.sprite.LayeredUpdates()
