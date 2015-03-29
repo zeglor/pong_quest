@@ -2,7 +2,7 @@ from collections import defaultdict
 import pygame as pg
 import os
 from params import *
-from image_sheet import ImageSheetSimple
+from image_sheet import ImageSheetSimple, ImageSheetRotating
 
 class ResourcesContainer:
 	def __init__(self):
@@ -32,3 +32,8 @@ class ResourcesContainer:
 		old_man_sheet = old_man_sheet.convert_alpha()
 		
 		self.old_man = ImageSheetSimple(old_man_sheet, (TILE_SIZE[0], int(TILE_SIZE[1]*1.2)), 3, 10)
+		
+		saw = pg.transform.scale(
+			pg.image.load(os.path.join('resources', 'saw.png')),
+			SAW_SIZE)
+		self.saw = ImageSheetRotating(saw, 12.0)

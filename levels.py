@@ -251,7 +251,7 @@ level_maps.append(
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], #17
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], #18
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'E'], #19
-		[1,1,1,1,1,1,1,1,1,1,1,'O','O',1,1,1,1,1,1,1,1,1,1,1,1,1,1,'J',1,1,1,1,1,1,1,1,1,1,1,1], #20
+		[1,1,1,1,1,1,1,1,1,1,1,'O','O',1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,'J',1,1,1,1,1,1,1,1,1,1,1], #20
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], #21
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], #22
 		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], #23
@@ -393,7 +393,7 @@ enemies = [[] for _ in range(5)] + \
 
 class Level:
 	def __init__(self, resources = None):
-		self.level_indx = 0
+		self.level_indx = 6
 		self.resources = resources
 		#groups
 		self.Gdrawables = pg.sprite.LayeredUpdates()
@@ -426,7 +426,7 @@ class Level:
 		#init enemies
 		npc = None
 		for (enemy_type, enemy_pos) in enemies[indx]:
-			npc = NPC.create(enemy_type, enemy_pos)
+			npc = NPC.create(enemy_type, enemy_pos, resources = self.resources)
 			npc.add((self.Gdrawables, self.Gdynamic, self.Grigid, self.Genemies))
 	
 	def finish_level(self):

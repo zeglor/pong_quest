@@ -2,6 +2,7 @@ import pygame as pg
 from params import *
 from copy import copy, deepcopy
 from tiles import FinishTile, JumpTile
+#from main import CircleCollider
 
 class NPC(pg.sprite.Sprite):
 	@classmethod
@@ -33,18 +34,15 @@ class NPC(pg.sprite.Sprite):
 		return img
 	
 	def update(self):
-		#pdb.set_trace()
 		self.prev_rect = copy(self.rect)
 		self.rect.x += self.speed
 		self.rect.y += self.speed_y
 		
 		self.fix_position()
 		self.clear_surrounding_tiles()
-		#self.surrounding_tiles.clear()
 	
 	def collide_static_tile(self, tile):
 		self.surrounding_tiles.add(tile)
-		#self.fix_position()
 	
 	def fix_position(self):
 		pr = self.prev_rect
@@ -53,27 +51,14 @@ class NPC(pg.sprite.Sprite):
 		for t in self.surrounding_tiles:
 			tr = t.rect
 			if pg.sprite.collide_rect(self, t):
-				#pdb.set_trace()
 				if nr.y > pr.y and nr.right > tr.left:
-				#if self.speed_y > 0:
 					#we're trying to move down
 					if tr.top <= nr.bottom and tr.top >= pr.bottom:
 						nr.bottom = tr.top
 				elif nr.y < pr.y and nr.right > tr.left:
-				#elif self.speed_y < 0:
 					#we're trying to move up
 					if tr.bottom >= nr.top and tr.bottom <= pr.top:
 						nr.top = tr.bottom
-					#if tr.top <= nr.bottom and tr.top >= pr.bottom:
-					#	nr.bottom = tr.top
-				#if following piece uncommented, jump tile works fine always, but
-				#at start of new level npc sometimes falls to the middle of tiles
-				#otherwise npc walks over other tiles well always BUT jump tile
-				#sometimes doesnt push npc to top. WTF
-				#! nope, now its okay. now just the second part happens
-				#else:
-					#if tr.top <= nr.bottom and tr.top >= pr.bottom:
-					#	nr.bottom = tr.top
 				#!!more shitty code
 				if self.speed_y > 0 and isinstance(t, JumpTile) and \
 					nr.bottom >= tr.top and nr.top <= tr.top and \
@@ -147,11 +132,60 @@ class NPCEnemy(NPC):
 #enemies
 class NPCSaw(NPCEnemy):
 	def __init__(self, pos, resources = None):
+		self.image_sheet = copy(resources.saw)
 		super().__init__(pos, SAW_SIZE, resources)
+		self.collider = CircleCollider(self.rect.center, SAW_SIZE[0] / 2)
 	
 	def update(self):
-		#we dont move
-		pass
+		self.image_sheet.update()
+		center = self.rect.center
+		self.image = self.image_sheet.get_image()
+		self.rect = self.image.get_rect()
+		self.rect.center = center
+	
+	def get_image(self):
+		return self.image_sheet.get_image()
 	
 	def collide_static_tile(self, tile):
 		pass
+
+class Collider:
+	def __init__(self, *args, **kwargs):
+		pass
+	
+	def collide(self, other):
+		pass
+
+class CircleCollider(Collider):
+	def __init__(self, pos, radius):
+		self.x = pos[0]
+		self.y = pos[1]
+		self.r = radius
+	
+	def collide(self, other):
+		if isinstance(other, pg.Rect):
+			circle = self
+			rect = other
+			
+			class Dist:
+				x = 0
+				y = 0
+			
+			circleDistance = Dist()
+			circleDistance.x = abs(circle.x - rect.x);
+			circleDistance.y = abs(circle.y - rect.y);
+			
+			if (circleDistance.x > (rect.width/2 + circle.r)):
+				return False
+			if (circleDistance.y > (rect.height/2 + circle.r)):
+				return False
+			
+			if (circleDistance.x <= (rect.width/2)):
+				return True
+			if (circleDistance.y <= (rect.height/2)):
+				return True
+			
+			cornerDistance_sq = (circleDistance.x - rect.width/2)**2 + \
+				(circleDistance.y - rect.height/2)**2;
+			
+			return (cornerDistance_sq <= (circle.r**2));

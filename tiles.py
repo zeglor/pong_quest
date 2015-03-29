@@ -76,7 +76,7 @@ class JumpTile(Tile):
 	def __init__(self, pos=(0, 0), resources_manager=None):
 		super().__init__(pos, resources_manager)
 		self.active = False
-		self.speed_abs = 7
+		self.speed_abs = 8
 		self.wait_updates = 1
 		self.updates_active = 26
 		self.cur_update = 0

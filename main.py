@@ -2,6 +2,28 @@ import pygame as pg
 from levels import Level
 from resources import ResourcesContainer
 from params import *
+from npcs import Collider
+
+
+def collided(sprite1, sprite2):
+	is_collided = False
+	collider1 = None
+	collider2 = None
+	try:
+		collider1 = sprite1.collider
+	except AttributeError:
+		collider1 = sprite1.rect
+	try:
+		collider2 = sprite2.collider
+	except AttributeError:
+		collider2 = sprite2.rect
+	
+	if isinstance(collider1, Collider):
+		return collider1.collide(collider2)
+	elif isinstance(collider2, Collider):
+		return collider2.collide(collider1)
+	else:
+		return pg.sprite.collide_rect(sprite1, sprite2)
 
 def main():
 	pg.init()
@@ -42,7 +64,7 @@ def main():
 		level.Gdynamic.update()
 		
 		#check if we collide any enemy
-		for npc, enemies in pg.sprite.groupcollide(level.GmainNpc, level.Genemies, False, False).items():
+		for npc, enemies in pg.sprite.groupcollide(level.GmainNpc, level.Genemies, False, False, collided).items():
 			npc.die(enemies)
 		
 		#check if any item gone outside the border

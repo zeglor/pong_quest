@@ -27,3 +27,18 @@ class ImageSheetSimple:
 	
 	def get_image(self):
 		return self.framel[self.frame_indx]
+
+class ImageSheetRotating:
+	def __init__(self, sheet, angular_speed):
+		self.sheet = sheet
+		self.angular_speed = angular_speed
+		self.angle = 0.0
+	
+	def update(self):
+		self.angle += self.angular_speed
+	
+	def get_image(self):
+		center = self.sheet.get_rect().center
+		img = pg.transform.rotate(self.sheet, self.angle)
+		img.get_rect().center = center
+		return img
