@@ -413,15 +413,15 @@ class Level:
 		self.level_map = level_maps[indx]
 		self.init_map()
 		
-		#init platforms
-		self.platforms = None
-		self.platforms = TwoPlatforms.create(platform_name[indx], self.Gdynamic)
-		self.platforms.add((self.Gdrawables, self.Gdynamic, self.Gground))
-		
 		#init NPC
 		t_npc = None
 		t_npc = NPC.create(npc_name[indx], pos=npc_start_pos[indx], level=self, resources = self.resources)
 		t_npc.add((self.Gdrawables, self.Gdynamic, self.Grigid, self.GmainNpc))
+		
+		#init platforms
+		self.platforms = None
+		self.platforms = TwoPlatforms.create(platform_name[indx], self.Gdynamic)
+		self.platforms.add((self.Gdrawables, self.Gdynamic, self.Gground))
 		
 		#init enemies
 		npc = None
