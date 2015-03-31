@@ -2,6 +2,7 @@ import pygame as pg
 from params import *
 from copy import copy, deepcopy
 from tiles import FinishTile, JumpTile
+from random import random
 
 class NPC(pg.sprite.Sprite):
 	@classmethod
@@ -85,6 +86,11 @@ class NPC(pg.sprite.Sprite):
 		self.rect.inflate_ip(-abs(self.speed), -abs(self.speed_y))
 	
 	def out_of_gamefield(self):
+		#scream if you fall
+		if self.rect.bottom > DISPLAY_SIZE[1]:
+			if random() > 0.5:
+				self.resources.sound_scream_fall.play(maxtime=1000)
+		
 		#reinitialize
 		self.surrounding_tiles.clear()
 		self.rect.topleft = self.initial_pos
@@ -92,6 +98,9 @@ class NPC(pg.sprite.Sprite):
 		self.speed_y = 5
 	
 	def die(self, *enemies):
+		for enemy in enemies:
+			if isinstance(enemy[0], NPCSaw):
+				self.resources.sound_saw.play(maxtime=1000)
 		self.out_of_gamefield()
 		
 class NPCMain(NPC):
@@ -106,6 +115,7 @@ class NPCMain(NPC):
 		if len(ft) > 0:
 			if self.rect.colliderect(ft[0].rect.inflate((2,2))):
 				#we finished the level!
+				self.resources.sound_level_complete.play(maxtime=600)
 				self.level.finish_level()
 		
 		#update sprite sheet

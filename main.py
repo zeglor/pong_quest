@@ -32,6 +32,9 @@ def main():
 	resources = ResourcesContainer()
 	resources.load_all()
 	
+	#start main theme
+	pg.mixer.music.play(loops=-1)
+	
 	clock = pg.time.Clock()
 	
 	level = Level(resources)

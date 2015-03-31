@@ -37,3 +37,8 @@ class ResourcesContainer:
 			pg.image.load(os.path.join('resources', 'saw.png')),
 			SAW_SIZE)
 		self.saw = ImageSheetRotating(saw, 12.0)
+		
+		self.music_loop = pg.mixer.music.load(os.path.join('resources', 'FLOAT1.wav'))
+		self.sound_saw = pg.mixer.Sound(os.path.join('resources', 'saw.wav'))
+		self.sound_level_complete = pg.mixer.Sound(os.path.join('resources', 'success.wav'))
+		self.sound_scream_fall = pg.mixer.Sound(os.path.join('resources', 'scream_fall.ogg'))
