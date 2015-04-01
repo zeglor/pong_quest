@@ -41,4 +41,4 @@ class ResourcesContainer:
 		self.music_loop = pg.mixer.music.load(os.path.join('resources', 'FLOAT1.wav'))
 		self.sound_saw = pg.mixer.Sound(os.path.join('resources', 'saw.wav'))
 		self.sound_level_complete = pg.mixer.Sound(os.path.join('resources', 'success.wav'))
-		self.sound_scream_fall = pg.mixer.Sound(os.path.join('resources', 'screamfall.ogg'))
+		self.sound_scream_fall = pg.mixer.Sound(os.path.join('resources', 'screamfall.wav'))
